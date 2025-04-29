@@ -5,9 +5,8 @@ namespace App\Services;
 use App\Errors\ProductInvalidException;
 use App\Errors\ProductNotFoundException;
 use App\Models\ProductModel;
-use App\Services\Interfaces\TemplateCrudService;
 
-class ProductService implements TemplateCrudService{
+class ProductService{
 
     public function create($data){
         $model = model(ProductModel::class);
@@ -31,7 +30,11 @@ class ProductService implements TemplateCrudService{
     public function update($data){
         error_log(print_r($data, true));
         $model = model(ProductModel::class);
-        return $model->update($data['batch'], $data);
+        if($model->update($data['batch'], $data)){
+            return true;
+        }
+        $errors =  new ProductInvalidException($model);
+        throw $errors;
     }
 
     public function delete($id){

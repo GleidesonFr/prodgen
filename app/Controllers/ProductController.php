@@ -42,17 +42,16 @@ class ProductController extends Controller{
             $productService->create($data);
             return $this->response->setJSON(['status' => 'success'])->setStatusCode(200);
         } catch (ProductInvalidException $e) {
-            return $this->response->setJSON([
-                'status' => 'error',
-                'message' => $e->getErrors()
-            ])->setStatusCode(400);
+            return $this->response->setStatusCode(422)->setJSON([
+                'error' => $e->getErrors()
+            ]);
         }
     }
 
 
     public function update($id){
         $data = [
-            'batch' => $this->request->getPost('batch'),
+            'batch' => $id,
             'supplier' => $this->request->getPost('supplier'),
             'name' => $this->request->getPost('name'),
             'value' => $this->request->getPost('value'),
@@ -66,13 +65,13 @@ class ProductController extends Controller{
         ];
         $productService = new ProductService();
 
-        if($productService->update($data)){
+        try{
+            $productService->update($data);
             return $this->response->setJSON(['status' => 'success'])->setStatusCode(200);
-        }else{
+        }catch (ProductInvalidException $e) {
             return $this->response->setJSON([
-                'status' => 'error',
-                'errors' => $this->validator->getErrors()
-            ])->setStatusCode(400);
+                'error' => $e->getErrors()
+            ])->setStatusCode(422);            
         }
     }
     

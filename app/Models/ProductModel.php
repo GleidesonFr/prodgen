@@ -21,52 +21,54 @@ class ProductModel extends Model{
         'expiration_date']; //11
     
     protected $validationRules = [
-        'supplier' => 'required|string|min_length[3]',
-        'name' => 'required|string|min_length[3]',
-        'value' => 'required|decimal',
-        'quantity' => 'required|integer',
+        'supplier' => 'required|string',
+        'name' => 'required|string',
+        'value' => 'required|decimal|greater_than[0]',
+        'quantity' => 'required|integer|greater_than[0]',
         'minimun_stock' => 'required|integer',
-        'net_weight' => 'required|decimal',
-        'profit' => 'required|decimal',
-        'category' => 'required|string|min_length[3]',
-        'manufacturing_date' => 'required|valid_date[Y-m-d]',
-        'expiration_date' => 'valid_date[Y-m-d]'
+        'net_weight' => 'required|decimal|greater_than[0]',
+        'profit' => 'required|decimal|greater_than[0]',
+        'category' => 'required|string',
+        'manufacturing_date' => 'required',
+        'expiration_date' => 'required'
     ];
 
     protected $validationMessages = [
         'supplier' => [
             'required' => 'O fornecedor do produto é obrigatório!',
-            'min_length[3]' => 'O nome do fornecedor é inválido!',
         ],
         'name' => [
             'required' => 'O nome do produto é obrigatório!',
-            'min_length[3]' => 'O nome do produto é inválido!',
         ],
         'value' => [
             'required' => 'O valor do produto é obrigatório!',
-            'granter_than[-1]' => 'O valor do produto é inválido!',
+            'greater_than' => 'Insira um valor maior que zero!'
         ] ,
         'quantity' => [
             'required' => 'A quantidade do produto é obrigatória!',
-            'granter_than_equal_to[0]' => 'A quantidade do produto inválida!',
+            'greater_than' => 'Insira um valor maior que zero!'
         ],
-        'minimum_stock' => [
+        'minimun_stock' => [
             'required' => 'A quantidade de estoque mínimo é obrigatória!',
-            'granter_than[0]' => 'A quantidade de estoque mínimo inválida!',
         ],
         'net_weight' => [
             'required' => 'O peso líquido do produto é obrigatório!',
-            'granter_than[0]' => 'O peso líquido do produto é inválido!',
+            'greater_than' => 'Insira um valor maior que zero!'
         ],
         'profit' => [
             'required' => 'O lucro sobre o produto é obrigatório!',
-            'granter_than[0]' => 'O lucro sobre o produto é inválido!',            
+            'greater_than' => 'Insira um valor maior que zero!',            
         ],
-        
         'category' => [
             'required' => 'A categoria é obrigatória!',
-            'min_length[3]' => 'A categoria é inválida!',
+        ],
+        'manufacturing_date' => [
+            'required' => 'A data de fabricação é obrigatória!',
+        ],
+        'expiration_date' => [
+            'required' => 'A data de validade é obrigatória!'
         ]
+
     ];
 }
 

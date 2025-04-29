@@ -79,10 +79,12 @@
                         <div class="mb-3">
                             <label for="productName" class="form-label">Nome do Produto</label>
                             <input type="text" class="form-control" id="productName" placeholder="Nome do Produto">
+                            <div class="invalid-feedback" id="errorProductName"></div>
                         </div>
                         <div class="mb-3">
                             <label for="supplierName" class="form-label">Fornecedor</label>
                             <input type="text" class="form-control" id="supplierName" placeholder="Nome do Fornecedor">
+                            <div class="invalid-feedback" id="errorSupplierName"></div>
                         </div>
                         <div class="mb-3">
                             <label for="productCategory" class="form-label">Categoria</label>
@@ -98,34 +100,42 @@
                                 <option value="cereais">Cereais</option>
                                 <option value="bebidas">Bebidas</option>
                             </select>
+                            <div class="invalid-feedback" id="errorCategoryProduct"></div>
                         </div>
                         <div class="mb-3">
                             <label for="productPrice" class="form-label">Preço</label>
                             <input type="number" class="form-control" id="productPrice" placeholder="Preço">
+                            <div class="invalid-feedback" id="errorPriceValue"></div>
                         </div>
                         <div class="mb-3">
                             <label for="productQuantity" class="form-label">Quantidade</label>
                             <input type="number" class="form-control" id="productQuantity" placeholder="Quantidade">
+                            <div class="invalid-feedback" id="errorQuantityValue"></div>
                         </div>
                         <div class="mb-3">
                             <label for="minimumStock" class="form-label">Estoque Mínimo</label>
                             <input type="number" class="form-control" id="minimumStock" placeholder="Estoque Mínimo">
+                            <div class="invalid-feedback" id="errorMinimunValue"></div>
                         </div>
                         <div class="mb-3">
                             <label for="netWeight" class="form-label">Peso Líquido</label>
                             <input type="number" class="form-control" id="netWeight" placeholder="Peso Líquido">
+                            <div class="invalid-feedback" id="errorNetWeightValue"></div>
                         </div>
                         <div class="mb-3">
                             <label for="profitProduct" class="form-label">Lucro</label>
                             <input type="number" class="form-control" id="profitProduct" placeholder="Lucro">
+                            <div class="invalid-feedback" id="errorProfitValue"></div>
                         </div>
                         <div class="mb-3">
                             <label for="manufacturingDate" class="form-label">Data de Fabricação</label>
                             <input type="date" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}" class="form-control" id="manufacturingDate" placeholder="Data de Fabricação">
+                            <div class="invalid-feedback" id="errorManufacturingDate"></div>
                         </div>
                         <div class="mb-3">
                             <label for="expitarionDate" class="form-label">Data de Validade</label>
                             <input type="date" pattern="[0-9]{2}/[0-9]{2}/[0-9]{4}"  class="form-control" id="expirationDate" placeholder="Data de Validade">
+                            <div class="invalid-feedback" id="errorExpirationDate"></div>
                         </div>
                     </form>
                 </div>
@@ -206,6 +216,26 @@
             fetchProducts();
 
             $('#productBtn').click(function(){
+                $('#productName').removeClass('is-invalid');
+                $('#supplierName').removeClass('is-invalid');
+                $('#productQuantity').removeClass('is-invalid');
+                $('#productPrice').removeClass('is-invalid');
+                $('#minimumStock').removeClass('is-invalid');
+                $('#netWeight').removeClass('is-invalid');
+                $('#profitProduct').removeClass('is-invalid');
+                $('#productCategory').removeClass('is-invalid');
+                $('#manufacturingDate').removeClass('is-invalid');
+                $('#expirationDate').removeClass('is-invalid');
+                $('#errorProductName').text('');
+                $('#errorSupplierName').text('');
+                $('#errorQuantityValue').text('');
+                $('#errorPriceValue').text('');
+                $('#errorMinimunValue').text('');
+                $('#errorNetWeightValue').text('');
+                $('#errorProfitValue').text('');
+                $('#errorCategoryProduct').text('');
+                $('#errorManufacturingDate').text('');
+                $('#errorExpirationDate').text('');
                 idForUpdate = null;
                 $('#productName').val('');
                 $('#supplierName').val('');
@@ -227,6 +257,7 @@
 
             $(document).on('click', '.btn-edit', function(e){
                 let batch = $(this).data('id');
+
                 $.ajax({
                     url: '/products/show/' + batch,
                     type: 'GET',
@@ -250,7 +281,27 @@
 
             $('#addProductBtn').click(function(){
                 let batch = idForUpdate;
-                console.log(batch);
+
+                $('#productName').removeClass('is-invalid');
+                $('#supplierName').removeClass('is-invalid');
+                $('#productQuantity').removeClass('is-invalid');
+                $('#productPrice').removeClass('is-invalid');
+                $('#minimumStock').removeClass('is-invalid');
+                $('#netWeight').removeClass('is-invalid');
+                $('#profitProduct').removeClass('is-invalid');
+                $('#productCategory').removeClass('is-invalid');
+                $('#manufacturingDate').removeClass('is-invalid');
+                $('#expirationDate').removeClass('is-invalid');
+                $('#errorProductName').text('');
+                $('#errorSupplierName').text('');
+                $('#errorQuantityValue').text('');
+                $('#errorPriceValue').text('');
+                $('#errorMinimunValue').text('');
+                $('#errorNetWeightValue').text('');
+                $('#errorProfitValue').text('');
+                $('#errorCategoryProduct').text('');
+                $('#errorManufacturingDate').text('');
+                $('#errorExpirationDate').text('');
                 $.ajax({
                     url: batch ? '/products/edit/' + batch : '/products/create/',
                     type: 'POST',
@@ -271,6 +322,43 @@
                         productModal.hide();
                         fetchProducts();
                         $('#productModalLabel').text('Criar Produto');
+                    },
+                    error: function(xhr){
+                        if(xhr.status === 422){
+                            const errors = xhr.responseJSON.error;
+                            console.log(errors);
+                            if(errors.name){
+                                $('#productName').addClass('is-invalid');
+                                $('#errorProductName').text(errors.name);
+                            }if(errors.supplier){
+                                $('#supplierName').addClass('is-invalid');
+                                $('#errorSupplierName').text(errors.supplier); 
+                            }if(errors.category){
+                                $('#productCategory').addClass('is-invalid');
+                                $('#errorCategoryProduct').text(errors.category); 
+                            }if(errors.quantity){
+                                $('#productQuantity').addClass('is-invalid');
+                                $('#errorQuantityValue').text(errors.quantity);
+                            }if(errors.value){
+                                $('#productPrice').addClass('is-invalid');
+                                $('#errorPriceValue').text(errors.value);
+                            }if (errors.minimun_stock) {
+                                $('#minimumStock').addClass('is-invalid');
+                                $('#errorMinimunValue').text(errors.minimun_stock);
+                            }if(errors.net_weight){
+                                $('#netWeight').addClass('is-invalid');
+                                $('#errorNetWeightValue').text(errors.net_weight);
+                            }if(errors.profit){
+                                $('#profitProduct').addClass('is-invalid');
+                                $('#errorProfitValue').text(errors.profit);
+                            }if (errors.manufacturing_date) {
+                                $('#manufacturingDate').addClass('is-invalid');
+                                $('#errorManufacturingDate').text(errors.manufacturing_date);
+                            }if (errors.expiration_date) {
+                                $('#expirationDate').addClass('is-invalid');
+                                $('#errorExpirationDate').text(errors.expiration_date);
+                            }
+                        }
                     }
                 });
             });
