@@ -103,7 +103,7 @@
                             <div class="invalid-feedback" id="errorCategoryProduct"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="productPrice" class="form-label">Preço</label>
+                            <label for="productPrice" class="form-label">Preço (R$)</label>
                             <input type="number" class="form-control" id="productPrice" placeholder="Preço">
                             <div class="invalid-feedback" id="errorPriceValue"></div>
                         </div>
@@ -118,12 +118,12 @@
                             <div class="invalid-feedback" id="errorMinimunValue"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="netWeight" class="form-label">Peso Líquido</label>
+                            <label for="netWeight" class="form-label">Peso Líquido (kg)</label>
                             <input type="number" class="form-control" id="netWeight" placeholder="Peso Líquido">
                             <div class="invalid-feedback" id="errorNetWeightValue"></div>
                         </div>
                         <div class="mb-3">
-                            <label for="profitProduct" class="form-label">Lucro</label>
+                            <label for="profitProduct" class="form-label">Lucro (%)</label>
                             <input type="number" class="form-control" id="profitProduct" placeholder="Lucro">
                             <div class="invalid-feedback" id="errorProfitValue"></div>
                         </div>
